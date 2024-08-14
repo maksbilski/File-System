@@ -17,11 +17,24 @@ This project implements a basic file system within a virtual disk environment us
   - Display the current state of the virtual disk, including the allocation map and the status (free/occupied) of disk blocks.
 - **Disk Deletion**: Remove the virtual disk file from the system.
 
-## Implementation Details
+## How the File System Works
 
-- **Single-Level Directory Structure**: The file system uses a simple directory structure where each entry contains the file name, size, and location on the virtual disk.
-- **Allocation Map**: The system tracks the allocation of disk blocks to ensure efficient storage and prevent fragmentation.
-- **Error Handling**: The system handles scenarios such as insufficient disk space, duplicate file names, and attempts to delete non-existent files.
+### Inodes and Directory Structure
+
+The file system utilizes an inode-based architecture, which is a common method in UNIX-like systems to manage files. Each file on the virtual disk is associated with an inode, which is a data structure that stores essential information about the file, such as:
+
+- **File Name**: The name of the file.
+- **File Size**: The size of the file in bytes.
+- **Data Block Pointers**: Pointers to the blocks on the virtual disk where the actual file data is stored.
+- **Metadata**: Additional information such as file creation date, last modified date, and access permissions (if applicable).
+
+### Allocation Map
+
+The allocation map is a critical component of the file system that keeps track of which blocks on the virtual disk are free and which are occupied. This map helps the file system efficiently manage disk space and minimize fragmentation.
+
+- **Block Allocation**: When a new file is created or an existing file is extended, the allocation map is consulted to find free blocks on the virtual disk. These blocks are then marked as occupied, and the file's inode is updated with pointers to these blocks.
+  
+- **Fragmentation Handling**: The allocation map helps in reducing both internal and external fragmentation. Internal fragmentation is minimized by allocating only the necessary number of blocks based on the file size. External fragmentation is addressed by attempting to allocate contiguous blocks whenever possible, ensuring that the file data is stored sequentially on the disk.
 
 ## Testing
 
